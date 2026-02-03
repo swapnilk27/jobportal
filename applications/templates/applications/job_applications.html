@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applications</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h3>Applications for: {{ job.job_title }}</h3>
+
+    {% if applications %}
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Applicant</th>
+                    <th>Email</th>
+                    <th>Resume</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td>{{ app.applicant.username }}</td>
+                    <td>{{ app.applicant.email }}</td>
+                    <td>
+                        <a href="{{ app.resume.url }}" target="_blank">View</a>
+                    </td>
+                    <td>{{ app.status }}</td>
+                    <td>{{ app.applied_date|date:"d M Y" }}</td>
+                    <td>
+                        {% if app.status == "pending" %}
+                            <a href="{% url 'update_application_status' app.id 'accepted' %}"
+                               class="btn btn-success btn-sm">
+                                Accept
+                            </a>
+
+                            <a href="{% url 'update_application_status' app.id 'rejected' %}"
+                               class="btn btn-danger btn-sm">
+                                Reject
+                            </a>
+                        {% else %}
+                            <span class="badge badge-info">{{ app.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No applications yet.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

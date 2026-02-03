@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Applications</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">View Applications</a>
+
+    <div class="ml-auto">
+<!--        <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'post_job' %}" role="button">Post Jobs</a>-->
+
+        <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_dashboard' %}" role="button">Recruiter's Dashboard</a>
+        <a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
+    </div>
+
+</nav>
+
+
+<div class="list-group container mt-5">
+    {% for app in applications %}
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <div class="flex-column">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ app.job.job_title }}</h5>
+                </div>
+                <p class="mb-1"><strong>{{ app.job.company_name }}</strong></p>
+                <p class="mb-1">Status: <strong>{{ app.status }}</strong></p>
+                <small>Applied on {{ app.applied_date|date:"d M Y" }}</small>
+            </div> </div> {% empty %}
+        <div class="list-group-item">
+            <p class="mb-0">Anyone not applied to this job yet.</p>
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>
