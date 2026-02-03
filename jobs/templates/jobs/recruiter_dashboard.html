@@ -1,34 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Recruiter Dashboard<</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% extends "base.html" %}
 
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Recruiter's Dashboard</a>
-    <div class="ml-auto">
+{% block title %}Recruiter's Dashboard{% endblock %}
+
+{% block navbar_buttons %}
         <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_job_list' %}" role="button">Job List</a>
         <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'post_job' %}" role="button">Post Jobs</a>
         <a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
-    </div>
-</nav>
-{% if messages %}
-  <div class="container mt-3">
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert">
-          <span>&times;</span>
-        </button>
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock %}
+
+<!-- Page Header -->
+{% block page_header %}
+<div class="container mt-4">
+    <h2 class="mb-1">Recruiter's Dashboard</h2>
+    <hr>
+</div>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+
