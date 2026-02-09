@@ -10,13 +10,62 @@ from .models import Job
 def jobseeker_dashboard(request):
     if request.user.roles != "jobseeker":
         return redirect('login')
-    return render(request, "jobs/jobseeker_dashboard.html")
+
+    applications = Application.objects.filter(applicant=request.user)
+
+    total_applications = applications.count()
+    pending_applications = applications.filter(status="pending").count()
+    accepted_applications = applications.filter(status="accepted").count()
+    rejected_applications = applications.filter(status="rejected").count()
+
+    recent_applications = applications.order_by("-applied_date")[:5]
+
+    last_application = applications.order_by("-applied_date").first()
+
+    context = {
+        "total_applications": total_applications,
+        "pending_applications": pending_applications,
+        "accepted_applications": accepted_applications,
+        "rejected_applications": rejected_applications,
+        "recent_applications": recent_applications,
+        "last_application": last_application,
+    }
+
+    return render(request, "jobs/jobseeker_dashboard.html", context)
+
 
 @login_required(login_url='login')
 def recruiter_dashboard(request):
     if request.user.roles != "recruiter":
         return redirect('login')
-    return render(request, "jobs/recruiter_dashboard.html")
+
+    jobs = Job.objects.filter(posted_by=request.user)
+
+    total_job_posted = jobs.count()
+    total_applications_received = Application.objects.filter(job__posted_by=request.user).count()
+    pending_applications = Application.objects.filter(
+        status="pending", job__posted_by=request.user
+    ).count()
+    accepted_applications = Application.objects.filter(
+        status="accepted", job__posted_by=request.user
+    ).count()
+
+    # Jobs with no applicants
+    jobs_with_no_applicants = jobs.filter(application__isnull=True).count()
+
+    latest_jobs = jobs.order_by("-created_date")[:5]
+
+    context = {
+        "total_job_posted": total_job_posted,
+        "total_applications_received": total_applications_received,
+        "pending_applications": pending_applications,
+        "accepted_applications": accepted_applications,
+        "jobs_with_no_applicants": jobs_with_no_applicants,
+        "latest_jobs": latest_jobs,
+    }
+
+    return render(request, "jobs/recruiter_dashboard.html", context)
+
 
 
 @login_required(login_url='login')

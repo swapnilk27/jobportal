@@ -17,6 +17,45 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
+
+    <h5>Summary</h5>
+    <ul class="list-group mt-3 mb-3">
+      <li class="list-group-item">Total Jobs Posted: {{ total_job_posted }}</li>
+      <li class="list-group-item">Total Applications Received: {{ total_applications_received }}</li>
+      <li class="list-group-item">Pending Applications: {{ pending_applications }}</li>
+      <li class="list-group-item">Accepted Applications: {{ accepted_applications }}</li>
+    </ul>
+
+    {% if jobs_with_no_applicants > 0 %}
+        <div class="alert alert-warning">
+            {{ jobs_with_no_applicants }} job{{ jobs_with_no_applicants|pluralize }}
+            have no applicants yet.
+        </div>
+    {% endif %}
+
+</div>
+
+<hr>
+
+<div class="container">
+    <h5>Recent Jobs</h5>
+
+    {% if latest_jobs %}
+        <ul class="list-group mt-3 mb-3">
+            {% for job in latest_jobs %}
+                <li class="list-group-item">
+                    <strong>{{ job.job_title }}</strong><br>
+                    <small>{{ job.created_date|date:"d M Y" }}</small><br>
+                    <a href="{% url 'job_applications' job.id %}">
+                        View Applications
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven’t posted any jobs yet.</p>
+    {% endif %}
+</div>
+
 {% endblock %}
-
-

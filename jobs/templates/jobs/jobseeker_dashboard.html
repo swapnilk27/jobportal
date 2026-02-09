@@ -18,4 +18,48 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
+
+    <h5>Summary</h5>
+    <ul class="list-group mt-3 mb-3">
+      <li class="list-group-item">Total applications: {{ total_applications }}</li>
+      <li class="list-group-item">Pending: {{ pending_applications }}</li>
+      <li class="list-group-item">Accepted: {{ accepted_applications }}</li>
+      <li class="list-group-item">Rejected: {{ rejected_applications }}</li>
+    </ul>
+
+    {% if total_applications == 0 %}
+        <div class="alert alert-info">
+            You haven’t applied to any jobs yet.
+        </div>
+    {% endif %}
+
+    {% if last_application and last_application.status == "pending" %}
+        <div class="alert alert-warning">
+            Your last application is still pending.
+        </div>
+    {% endif %}
+
+</div>
+
+<hr>
+
+<div class="container">
+    <h5>Recent Applications</h5>
+
+    {% if recent_applications %}
+        <ul class="list-group mt-3 mb-3">
+            {% for app in recent_applications %}
+                <li class="list-group-item">
+                    <strong>{{ app.job.job_title }}</strong><br>
+                    Status: {{ app.status|title }}<br>
+                    <small>{{ app.applied_date|date:"d M Y" }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recent applications.</p>
+    {% endif %}
+</div>
+
 {% endblock %}
