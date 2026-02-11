@@ -2,6 +2,7 @@ from django.db import models
 
 from jobs.models import Job
 from accounts.models import User
+from django.core.validators import FileExtensionValidator
 
 
 # Create your models here.
@@ -14,7 +15,10 @@ class Application(models.Model):
     )
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
-    resume = models.FileField(upload_to='resume/')
+    resume = models.FileField(
+        upload_to="resume/",
+        validators=[FileExtensionValidator(allowed_extensions=["pdf", "doc", "docx"])]
+    )
     status = models.CharField(choices=STATUS_CHOICES, default='pending', max_length=10)
     applied_date = models.DateTimeField(auto_now_add=True)
 

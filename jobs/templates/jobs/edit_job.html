@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Job{% endblock %}
+
+{% block content %}
+<h3>Edit Job</h3>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label>Job Title</label>
+        <input type="text" name="job_title" class="form-control"
+               value="{{ job.job_title }}" required>
+    </div>
+
+    <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" name="company_name" class="form-control"
+               value="{{ job.company_name }}" required>
+    </div>
+
+    <div class="form-group">
+        <label>Location</label>
+        <input type="text" name="location" class="form-control"
+               value="{{ job.location }}" required>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        Update Job
+    </button>
+</form>
+
+{% endblock %}

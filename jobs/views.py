@@ -85,8 +85,30 @@ def post_job(request):
         company_name = data.get("company_name")
         location = data.get("location")
 
-        Job.objects.create(job_title=job_title, company_name=company_name,location=location,posted_by=request.user)
-        messages.success(request, 'Job created and submitted successfully!')
+        # 🔍 Duplicate job check (same recruiter)
+        duplicate_job = Job.objects.filter(
+            posted_by=request.user,
+            job_title__iexact=job_title,
+            company_name__iexact=company_name,
+            location__iexact=location
+        ).exists()
+
+        if duplicate_job:
+            messages.warning(
+                request,
+                "You have already posted a similar job with the same title, company, and location."
+            )
+            return redirect('post_job')
+
+        # ✅ Create job if no duplicate
+        Job.objects.create(
+            job_title=job_title,
+            company_name=company_name,
+            location=location,
+            posted_by=request.user
+        )
+
+        messages.success(request, "Job created and submitted successfully!")
         return redirect('recruiter_job_list')
 
     return render(request, 'jobs/post_job.html')
@@ -173,3 +195,26 @@ def toggle_job_status(request, job_id):
 
     job.save()
     return redirect("recruiter_dashboard")
+
+
+@login_required(login_url='login')
+def edit_job(request, job_id):
+    if request.user.roles != "recruiter":
+        return redirect("jobseeker_dashboard")
+
+    job = get_object_or_404(Job, id=job_id, posted_by=request.user)
+
+    if job.status == "closed":
+        messages.error(request, "Closed jobs cannot be edited")
+        return redirect("recruiter_job_list")
+
+    if request.method == "POST":
+        job.job_title = request.POST.get("job_title")
+        job.company_name = request.POST.get("company_name")
+        job.location = request.POST.get("location")
+        job.save()
+
+        messages.success(request, "Job updated successfully!")
+        return redirect("recruiter_job_list")
+
+    return render(request, "jobs/edit_job.html", {"job": job})

@@ -12,5 +12,7 @@ urlpatterns = [
     path('job/<int:job_id>/apply/', apply_job, name="apply_job"),
     path('job/<int:job_id>/applications/', job_applications, name='job_applications'),
     path("toggle-job/<int:job_id>/",toggle_job_status, name="toggle_job_status"),
+    path("job/<int:job_id>/edit/", edit_job, name="edit_job"),
+
 
 ]
