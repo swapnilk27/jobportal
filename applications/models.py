@@ -10,6 +10,7 @@ class Application(models.Model):
     ('pending', 'Pending'),
     ('accepted', 'Accepted'),
     ('rejected', 'Rejected'),
+    ("withdrawn", "Withdrawn"),
     )
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)

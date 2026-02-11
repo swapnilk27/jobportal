@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
 from accounts.models import User
@@ -42,7 +42,10 @@ def recruiter_dashboard(request):
     jobs = Job.objects.filter(posted_by=request.user)
 
     total_job_posted = jobs.count()
-    total_applications_received = Application.objects.filter(job__posted_by=request.user).count()
+    total_applications_received = Application.objects.filter(
+        job__posted_by=request.user
+    ).exclude(status="withdrawn").count()
+
     pending_applications = Application.objects.filter(
         status="pending", job__posted_by=request.user
     ).count()
@@ -111,6 +114,9 @@ def apply_job(request, job_id):
 
     job = Job.objects.get(id=job_id)
 
+    if job.status == "closed":
+        messages.error(request, "This job is closed and not accepting applications.")
+        return redirect("job_detail", job_id=job.id)
     # Prevent duplicate application
     if Application.objects.filter(job=job, applicant=request.user).exists():
         messages.error(request, "You already applied for this job")
@@ -135,3 +141,19 @@ def job_detail_page(request, job_id):
     job = Job.objects.get(id=job_id)
     return render(request, "jobs/job.html", context={'job':job})
 
+@login_required(login_url="login")
+def toggle_job_status(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+
+    if request.user != job.posted_by:
+        return redirect("login")
+
+    if job.status == "open":
+        job.status = "closed"
+        messages.success(request, "Job closed successfully.")
+    else:
+        job.status = "open"
+        messages.success(request, "Job reopened successfully.")
+
+    job.save()
+    return redirect("recruiter_dashboard")

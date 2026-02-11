@@ -50,3 +50,17 @@ def update_application_status(request, app_id, status):
 
     messages.success(request, f"Application {status.capitalize()}!")
     return redirect('job_applications',job_id=application.job.id)
+
+@login_required(login_url="login")
+def withdraw_application(request, app_id):
+    application = get_object_or_404(Application, id=app_id)
+
+    if request.user != application.applicant:
+        return redirect("login")
+
+    if application.status == "pending":
+        application.status = "withdrawn"
+        application.save()
+        messages.success(request, "Application withdrawn successfully.")
+
+    return redirect("jobseeker_dashboard")

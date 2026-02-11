@@ -46,6 +46,14 @@
             {% for job in latest_jobs %}
                 <li class="list-group-item">
                     <strong>{{ job.job_title }}</strong><br>
+                    {% if job.status == "open" %}
+                        <span class="badge bg-success">Open</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Closed</span>
+                    {% endif %}
+                    <a href="{% url 'toggle_job_status' job.id %}" class="btn btn-sm btn-warning float-end">
+                        {% if job.status == "open" %}Close{% else %}Reopen{% endif %}
+                    </a>
                     <small>{{ job.created_date|date:"d M Y" }}</small><br>
                     <a href="{% url 'job_applications' job.id %}">
                         View Applications

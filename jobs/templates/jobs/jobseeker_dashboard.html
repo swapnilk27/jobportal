@@ -54,6 +54,12 @@
                     <strong>{{ app.job.job_title }}</strong><br>
                     Status: {{ app.status|title }}<br>
                     <small>{{ app.applied_date|date:"d M Y" }}</small>
+                    {% if app.status == "pending" %}
+                    <a href="{% url 'withdraw_application' app.id %}" class="btn btn-sm btn-danger float-end">
+                        Withdraw
+                    </a>
+                    {% endif %}
+
                 </li>
             {% endfor %}
         </ul>
