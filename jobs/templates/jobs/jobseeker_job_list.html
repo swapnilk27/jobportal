@@ -12,15 +12,24 @@
 {% block page_header %}
 <div class="container mt-4">
     <h2 class="mb-1">Jobs List</h2>
+    <div>
+        <form method="GET" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search jobs by title, company, or location">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+
+    </div>
 <!--    <p class="text-muted">All applications you applied</p>-->
     <hr>
 </div>
 {% endblock %}
 
 {% block content %}
-{% if jobseeker_job_list %}
+{% if jobseeker_job_list_page_obj %}
 <div class="list-group container mt-5">
-    {% for job in jobseeker_job_list %}
+    {% for job in jobseeker_job_list_page_obj %}
         <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
             <div class="flex-column">
                 <div class="d-flex w-100 justify-content-between">
@@ -41,4 +50,37 @@
 <div class="container mt-5 d-flex justify-content-center align-items-center vh-100">Jobs are posted yet.</div>
 
 {% endif %}
+<nav>
+    <ul class="pagination justify-content-center mt-4">
+
+        {% if jobseeker_job_list_page_obj.has_previous %}
+            <li class="page-item">
+                {% if query %}
+                    <a class="page-link" href="?q={{ query }}&page={{ jobseeker_job_list_page_obj.previous_page_number }}">Previous</a>
+                {% else %}
+                    <a class="page-link" href="?page={{ jobseeker_job_list_page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+<!--                <a class="page-link" href="?q={{ query }}&page={{ jobseeker_job_list_page_obj.previous_page_number }}">Previous</a>-->
+            </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link">
+                Page {{ jobseeker_job_list_page_obj.number }} of {{ jobseeker_job_list_page_obj.paginator.num_pages }}
+            </span>
+        </li>
+
+        {% if jobseeker_job_list_page_obj.has_next %}
+            <li class="page-item">
+                {% if query %}
+                    <a class="page-link" href="?q={{ query }}&page={{ jobseeker_job_list_page_obj.next_page_number }}">Next</a>
+                {% else %}
+                    <a class="page-link" href="?page={{ jobseeker_job_list_page_obj.next_page_number }}">Next</a>
+                {% endif %}
+            </li>
+        {% endif %}
+
+    </ul>
+</nav>
+
 {% endblock %}

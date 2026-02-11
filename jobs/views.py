@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q
 from django.contrib import messages
+from django.core.paginator import Paginator
+
 
 from accounts.models import User
 from applications.models import Application
@@ -97,15 +100,28 @@ def recruiter_job_list(request):
 
     return render(request, "jobs/recruiter_job_list.html", context={'recruiter_job_list':queryset})
 
-@login_required(login_url='login')
 def jobseeker_job_list(request):
-    if request.user.roles != "jobseeker":
-        return redirect('recruiter_dashboard')
+    query = request.GET.get("q", "").strip()
 
-    job_id = Job.objects.all()
+    jobs = Job.objects.filter(status="open")
 
-    return render(request, "jobs/jobseeker_job_list.html", context={'jobseeker_job_list':job_id})
+    if query:
+        jobs = jobs.filter(
+            Q(job_title__icontains=query) |
+            Q(company_name__icontains=query) |
+            Q(location__icontains=query)
+        )
 
+    paginator = Paginator(jobs, 8)  # 8 per page
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "jobseeker_job_list_page_obj": page_obj,
+        "query": query,
+    }
+
+    return render(request, "jobs/jobseeker_job_list.html", context)
 
 @login_required(login_url='login')
 def apply_job(request, job_id):
