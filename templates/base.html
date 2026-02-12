@@ -11,12 +11,39 @@
 
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="ml-auto">
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+
+    <!-- Left side: page-specific buttons -->
+    <div class="navbar-nav">
         {% block navbar_buttons %}
-        <!-- Child templates can override or add buttons -->
         {% endblock %}
     </div>
+
+    <!-- Right side: user menu -->
+    <div class="ml-auto">
+        {% if user.is_authenticated %}
+        <div class="dropdown">
+            <a class="btn btn-outline-secondary dropdown-toggle"
+               href="#"
+               role="button"
+               data-toggle="dropdown">
+                {{ user.username }}
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="{% url 'profile' %}">
+                    Profile
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                    Logout
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+
 </nav>
 
 <!-- Messages -->

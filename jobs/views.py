@@ -12,6 +12,7 @@ from .models import Job
 @login_required(login_url='login')
 def jobseeker_dashboard(request):
     if request.user.roles != "jobseeker":
+        messages.error(request, "You are not authorized to access this page.")
         return redirect('login')
 
     applications = Application.objects.filter(applicant=request.user)
@@ -40,6 +41,7 @@ def jobseeker_dashboard(request):
 @login_required(login_url='login')
 def recruiter_dashboard(request):
     if request.user.roles != "recruiter":
+        messages.error(request, "You are not authorized to access this page.")
         return redirect('login')
 
     jobs = Job.objects.filter(posted_by=request.user)
@@ -77,6 +79,7 @@ def recruiter_dashboard(request):
 @login_required(login_url='login')
 def post_job(request):
     if request.user.roles != "recruiter":
+        messages.error(request, "You are not authorized to access this page.")
         return redirect('login')
 
     if request.method == "POST":
@@ -116,6 +119,7 @@ def post_job(request):
 @login_required(login_url='login')
 def recruiter_job_list(request):
     if request.user.roles != "recruiter":
+        messages.error(request, "You are not authorized to view recruiter job listings.")
         return redirect('jobseeker_dashboard')
 
     queryset = Job.objects.filter(posted_by=request.user)
@@ -148,6 +152,7 @@ def jobseeker_job_list(request):
 @login_required(login_url='login')
 def apply_job(request, job_id):
     if request.user.roles != "jobseeker":
+        messages.error(request, "Only jobseekers can apply for jobs.")
         return redirect('recruiter_dashboard')
 
     job = Job.objects.get(id=job_id)
@@ -175,6 +180,7 @@ def apply_job(request, job_id):
 @login_required(login_url='login')
 def job_detail_page(request, job_id):
     if request.user.roles != "jobseeker":
+        messages.error(request, "You are not authorized to view this job.")
         return redirect('recruiter_dashboard')
     job = Job.objects.get(id=job_id)
     return render(request, "jobs/job.html", context={'job':job})
@@ -184,7 +190,8 @@ def toggle_job_status(request, job_id):
     job = get_object_or_404(Job, id=job_id)
 
     if request.user != job.posted_by:
-        return redirect("login")
+        messages.error(request, "You are not authorized to modify this job.")
+        return redirect("recruiter_dashboard")
 
     if job.status == "open":
         job.status = "closed"
@@ -200,6 +207,7 @@ def toggle_job_status(request, job_id):
 @login_required(login_url='login')
 def edit_job(request, job_id):
     if request.user.roles != "recruiter":
+        messages.error(request, "Only recruiters can edit jobs.")
         return redirect("jobseeker_dashboard")
 
     job = get_object_or_404(Job, id=job_id, posted_by=request.user)
