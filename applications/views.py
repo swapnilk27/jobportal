@@ -22,8 +22,7 @@ def job_applications(request, job_id):
     if request.user.roles != "recruiter":
         return redirect('jobseeker_dashboard')
     job = get_object_or_404(Job, id=job_id, posted_by=request.user)
-    applications = Application.objects.filter(job=job)
-    # messages.success()
+    applications = Application.objects.filter(job=job).exclude(status="withdrawn")
     return render(
         request,
         "applications/job_applications.html",

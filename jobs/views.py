@@ -88,7 +88,7 @@ def post_job(request):
         company_name = data.get("company_name")
         location = data.get("location")
 
-        # 🔍 Duplicate job check (same recruiter)
+        # Duplicate job check (same recruiter)
         duplicate_job = Job.objects.filter(
             posted_by=request.user,
             job_title__iexact=job_title,
@@ -103,7 +103,7 @@ def post_job(request):
             )
             return redirect('post_job')
 
-        # ✅ Create job if no duplicate
+        # Create job if no duplicate
         Job.objects.create(
             job_title=job_title,
             company_name=company_name,
@@ -122,9 +122,27 @@ def recruiter_job_list(request):
         messages.error(request, "You are not authorized to view recruiter job listings.")
         return redirect('jobseeker_dashboard')
 
-    queryset = Job.objects.filter(posted_by=request.user)
+    query = request.GET.get("q", "").strip()
 
-    return render(request, "jobs/recruiter_job_list.html", context={'recruiter_job_list':queryset})
+    jobs = Job.objects.filter(posted_by=request.user)
+
+    if query:
+        jobs = jobs.filter(
+            Q(job_title__icontains=query) |
+            Q(location__icontains=query)
+        )
+
+    paginator = Paginator(jobs.order_by("-created_date"), 5)  # 5 per page
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "recruiter_job_list_page_obj": page_obj,
+        "query": query,
+    }
+
+
+    return render(request, "jobs/recruiter_job_list.html", context)
 
 def jobseeker_job_list(request):
     query = request.GET.get("q", "").strip()
@@ -168,14 +186,21 @@ def apply_job(request, job_id):
     if request.method == "POST":
         resume = request.FILES.get("resume")
 
-        Application.objects.create(
+        application = Application(
             job=job,
             applicant=request.user,
             resume=resume
         )
 
-        messages.success(request, "Job applied successfully!")
-        return redirect('jobseeker_dashboard')
+        try:
+            application.full_clean()  # This triggers validators
+            application.save()
+            messages.success(request, "Job applied successfully!")
+            return redirect('jobseeker_dashboard')
+
+        except Exception as e:
+            messages.error(request, "Invalid file type. Only PDF, DOC, DOCX allowed.")
+            return redirect('job_detail', job_id=job_id)
 
 @login_required(login_url='login')
 def job_detail_page(request, job_id):

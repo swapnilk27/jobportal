@@ -87,6 +87,7 @@ def profile(request):
             "pending_applications": Application.objects.filter(applicant=user, status="pending").count(),
             "accepted_applications": Application.objects.filter(applicant=user, status="accepted").count(),
             "rejected_applications": Application.objects.filter(applicant=user, status="rejected").count(),
+            "withdrawn_applications": Application.objects.filter(applicant=user, status="withdrawn").count(),
         })
 
     elif user.roles == "recruiter":

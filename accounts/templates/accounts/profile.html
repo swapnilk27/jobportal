@@ -40,6 +40,12 @@
                     <h4 class="text-danger">{{ rejected_applications }}</h4>
                 </div>
             </div>
+            <div class="col-md-3">
+                <div class="card p-3 shadow-sm mt-4">
+                    <h6>Withdrawn</h6>
+                    <h4 class="text-danger">{{ withdrawn_applications }}</h4>
+                </div>
+            </div>
         </div>
 
     {% elif user.roles == "recruiter" %}
