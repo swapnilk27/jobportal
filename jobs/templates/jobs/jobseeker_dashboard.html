@@ -3,70 +3,132 @@
 {% block title %}Jobseeker's Dashboard{% endblock %}
 
 {% block navbar_buttons %}
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'jobseeker_job_list' %}" role="button">Job List</a>
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'my_applications' %}" role="button">My
-    Applications</a>
-<a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
+<!--    <div class="d-flex gap-2">-->
+<a class="btn btn-light border-0" href="{% url 'jobseeker_job_list' %}">Browse Jobs</a>
+<a class="btn btn-light shadow-sm" href="{% url 'my_applications' %}">My Applications</a>
 {% endblock %}
 
-<!-- Page Header -->
 {% block page_header %}
-<div class="container mt-4">
-    <h2 class="mb-1">Jobseeker's Dashboard</h2>
-    <!--    <p class="text-muted">All applications you applied</p>-->
-    <hr>
+<div class="container mt-5">
+    <div class="d-md-flex align-items-center justify-content-between">
+        <div>
+            <h2 class="fw-bold mb-1">Your Career Hub</h2>
+            <p class="text-muted">Track your progress and find your next opportunity.</p>
+        </div>
+        <a href="{% url 'jobseeker_job_list' %}" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+            Explore New Jobs
+        </a>
+    </div>
+    <hr class="opacity-10">
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container mb-5">
 
-    <h5>Summary</h5>
-    <ul class="list-group mt-3 mb-3">
-        <li class="list-group-item">Total applications: {{ total_applications }}</li>
-        <li class="list-group-item">Pending: {{ pending_applications }}</li>
-        <li class="list-group-item">Accepted: {{ accepted_applications }}</li>
-        <li class="list-group-item">Rejected: {{ rejected_applications }}</li>
-    </ul>
+    <!-- Metrics Row -->
+    <div class="row g-4 mb-5">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-center p-3">
+                <div class="card-body">
+                    <h6 class="text-muted small text-uppercase fw-bold">Applied</h6>
+                    <h2 class="fw-bold mb-0 text-dark">{{ total_applications }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-center p-3 border-bottom border-warning border-3">
+                <div class="card-body">
+                    <h6 class="text-muted small text-uppercase fw-bold">Pending</h6>
+                    <h2 class="fw-bold mb-0 text-warning">{{ pending_applications }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-center p-3 border-bottom border-success border-3">
+                <div class="card-body">
+                    <h6 class="text-muted small text-uppercase fw-bold">Accepted</h6>
+                    <h2 class="fw-bold mb-0 text-success">{{ accepted_applications }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100 text-center p-3 border-bottom border-danger border-3">
+                <div class="card-body">
+                    <h6 class="text-muted small text-uppercase fw-bold">Rejected</h6>
+                    <h2 class="fw-bold mb-0 text-danger">{{ rejected_applications }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Notifications Section -->
     {% if total_applications == 0 %}
-    <div class="alert alert-info">
-        You haven’t applied to any jobs yet.
+    <div class="alert alert-soft-info border-0 shadow-sm d-flex align-items-center mb-4"
+         style="background-color: #e7f3ff;">
+        <div class="p-2">
+            <strong>Get Started!</strong> You haven't applied to any jobs yet. Check the <a
+                href="{% url 'jobseeker_job_list' %}" class="alert-link">latest openings</a>.
+        </div>
+    </div>
+    {% elif last_application and last_application.status == "pending" %}
+    <div class="alert alert-soft-warning border-0 shadow-sm mb-4"
+         style="background-color: #fff8e1; border-left: 4px solid #ffc107;">
+        Your application for <strong>{{ last_application.job.job_title }}</strong> is currently under review by the
+        recruiter.
     </div>
     {% endif %}
 
-    {% if last_application and last_application.status == "pending" %}
-    <div class="alert alert-warning">
-        Your last application is still pending.
+    <!-- Recent Activity Section -->
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+            <h5 class="fw-bold mb-0">Recent Application Activity</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 border-0 text-muted small text-uppercase">Job Title</th>
+                        <th class="border-0 text-muted small text-uppercase text-center">Status</th>
+                        <th class="border-0 text-muted small text-uppercase">Applied Date</th>
+                        <th class="pe-4 border-0 text-muted small text-uppercase text-end">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if recent_applications %}
+                    {% for app in recent_applications %}
+                    <tr>
+                        <td class="ps-4 py-3">
+                            <span class="fw-bold text-dark">{{ app.job.job_title }}</span>
+                        </td>
+                        <td class="text-center">
+                            {% if app.status == 'accepted' %}
+                            <span class="badge rounded-pill bg-success-soft text-success px-3"
+                                  style="background-color: #e8f5e9;">Accepted</span>
+                            {% elif app.status == 'rejected' %}
+                            <span class="badge rounded-pill bg-danger-soft text-danger px-3"
+                                  style="background-color: #ffebee;">Rejected</span>
+                            {% else %}
+                            <span class="badge rounded-pill bg-warning-soft text-warning px-3"
+                                  style="background-color: #fff8e1;">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ app.applied_date|date:"d M Y" }}</td>
+                        <td class="pe-4 text-end">
+                            <a href="{% url 'my_applications' %}" class="btn btn-light btn-sm rounded-pill px-3 border">Details</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">No recent activity to show.</td>
+                    </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    {% endif %}
-
 </div>
-
-<hr>
-
-<div class="container">
-    <h5>Recent Applications</h5>
-
-    {% if recent_applications %}
-    <ul class="list-group mt-3 mb-3">
-        {% for app in recent_applications %}
-        <li class="list-group-item">
-            <strong>{{ app.job.job_title }}</strong><br>
-            Status: {{ app.status|title }}<br>
-            <small>{{ app.applied_date|date:"d M Y" }}</small>
-            {% if app.status == "pending" %}
-            <a href="{% url 'withdraw_application' app.id %}" class="btn btn-sm btn-danger float-end">
-                Withdraw
-            </a>
-            {% endif %}
-
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No recent applications.</p>
-    {% endif %}
-</div>
-
 {% endblock %}

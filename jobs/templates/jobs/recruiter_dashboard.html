@@ -3,15 +3,23 @@
 {% block title %}Recruiter's Dashboard{% endblock %}
 
 {% block navbar_buttons %}
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_job_list' %}" role="button">Job List</a>
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'post_job' %}" role="button">Post Jobs</a>
-<a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
+<div class="d-flex gap-2">
+    <a class="btn btn-light border-0 shadow-sm"
+       href="{% url 'recruiter_job_list' %}">
+        Job List
+    </a>
+
+    <a class="btn btn-light border-0 shadow-sm"
+       href="{% url 'post_job' %}">
+        Post Job
+    </a>
+
+</div>
 {% endblock %}
 
-<!-- Page Header -->
 {% block page_header %}
 <div class="container mt-4">
-    <h2 class="mb-1">Recruiter's Dashboard</h2>
+    <h2 class="fw-semibold">Recruiter Dashboard</h2>
     <hr>
 </div>
 {% endblock %}
@@ -19,16 +27,67 @@
 {% block content %}
 <div class="container">
 
-    <h5>Summary</h5>
-    <ul class="list-group mt-3 mb-3">
-        <li class="list-group-item">Total Jobs Posted: {{ total_job_posted }}</li>
-        <li class="list-group-item">Total Applications Received: {{ total_applications_received }}</li>
-        <li class="list-group-item">Pending Applications: {{ pending_applications }}</li>
-        <li class="list-group-item">Accepted Applications: {{ accepted_applications }}</li>
-    </ul>
+    <!-- Summary Section -->
+    <h5 class="mb-3">Summary</h5>
+
+    <div class="row mb-4">
+
+        <div class="col-6 col-md-3 mb-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body">
+                    <p class="text-muted small text-uppercase mb-1">
+                        Total Jobs
+                    </p>
+                    <h4 class="font-weight-bold mb-0">
+                        {{ total_job_posted }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3 mb-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body">
+                    <p class="text-muted small text-uppercase mb-1">
+                        Applications
+                    </p>
+                    <h4 class="font-weight-bold mb-0">
+                        {{ total_applications_received }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3 mb-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body">
+                    <p class="text-muted small text-uppercase mb-1">
+                        Pending
+                    </p>
+                    <h4 class="font-weight-bold text-warning mb-0">
+                        {{ pending_applications }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3 mb-3">
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body">
+                    <p class="text-muted small text-uppercase mb-1">
+                        Accepted
+                    </p>
+                    <h4 class="font-weight-bold text-success mb-0">
+                        {{ accepted_applications }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     {% if jobs_with_no_applicants > 0 %}
-    <div class="alert alert-warning">
+    <div class="alert alert-warning shadow-sm">
         {{ jobs_with_no_applicants }} job{{ jobs_with_no_applicants|pluralize }}
         have no applicants yet.
     </div>
@@ -36,33 +95,55 @@
 
 </div>
 
-<hr>
+<hr class="my-4">
 
 <div class="container">
-    <h5>Recent Jobs</h5>
+    <h5 class="mb-3">Recent Jobs</h5>
 
     {% if latest_jobs %}
-    <ul class="list-group mt-3 mb-3">
+    <div class="list-group shadow-sm rounded mb-4">
+
         {% for job in latest_jobs %}
-        <li class="list-group-item">
-            <strong>{{ job.job_title }}</strong><br>
-            {% if job.status == "open" %}
-            <span class="badge bg-success">Open</span>
-            {% else %}
-            <span class="badge bg-secondary">Closed</span>
-            {% endif %}
-            <a href="{% url 'toggle_job_status' job.id %}" class="btn btn-sm btn-warning float-end">
-                {% if job.status == "open" %}Close{% else %}Reopen{% endif %}
-            </a>
-            <small>{{ job.created_date|date:"d M Y" }}</small><br>
-            <a href="{% url 'job_applications' job.id %}">
-                View Applications
-            </a>
-        </li>
+        <div class="list-group-item py-3">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1 fw-semibold">{{ job.job_title }}</h6>
+
+                    {% if job.status == "open" %}
+                    <span class="badge badge-success">Open</span>
+                    {% else %}
+                    <span class="badge badge-secondary">Closed</span>
+                    {% endif %}
+
+                    <small class="text-muted d-block mt-1">
+                        {{ job.created_date|date:"d M Y" }}
+                    </small>
+                </div>
+
+                <div class="d-flex">
+                    <a href="{% url 'toggle_job_status' job.id %}"
+                       class="btn btn-sm btn-outline-warning mr-2">
+                        {% if job.status == "open" %}Close{% else %}Reopen{% endif %}
+                    </a>
+
+                    <a href="{% url 'job_applications' job.id %}"
+                       class="btn btn-sm btn-outline-secondary">
+                        Applications
+                    </a>
+                </div>
+            </div>
+
+        </div>
         {% endfor %}
-    </ul>
+
+    </div>
     {% else %}
-    <p>You haven’t posted any jobs yet.</p>
+    <div class="card shadow-sm p-4 text-center">
+        <p class="mb-0 text-muted">
+            You haven’t posted any jobs yet.
+        </p>
+    </div>
     {% endif %}
 </div>
 

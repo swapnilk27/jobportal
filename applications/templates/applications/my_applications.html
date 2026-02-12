@@ -3,37 +3,71 @@
 {% block title %}My Applications{% endblock %}
 
 {% block navbar_buttons %}
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'jobseeker_dashboard' %}" role="button">Jobseeker's
-    Dashboard</a>
-<a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
+<div class="d-flex gap-2">
+    <a class="btn btn-light border-0 shadow-sm"
+       href="{% url 'jobseeker_dashboard' %}">
+        Dashboard
+    </a>
+
+    <a class="btn btn-light border-0 shadow-sm"
+       href="{% url 'jobseeker_job_list' %}">
+        Browse Jobs
+    </a>
+
+</div>
 {% endblock %}
 
-<!-- Page Header -->
 {% block page_header %}
 <div class="container mt-4">
-    <h2 class="mb-1">View Applications</h2>
-    <p class="text-muted">All applications you applied</p>
+    <h2 class="mb-1 fw-semibold">My Applications</h2>
+    <p class="text-muted">All jobs you have applied for</p>
     <hr>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="list-group container mt-5">
-    {% for app in applications %}
-    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-        <div class="flex-column">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ app.job.job_title }}</h5>
+<div class="container mt-4">
+
+    {% if applications %}
+    <div class="list-group shadow-sm rounded">
+
+        {% for app in applications %}
+        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+
+            <div>
+                <h5 class="mb-1 fw-semibold">{{ app.job.job_title }}</h5>
+                <p class="mb-1 text-muted">
+                    <strong>{{ app.job.company_name }}</strong>
+                </p>
+
+                <p class="mb-1">
+                    Status:
+                    <span class="badge
+                        {% if app.status == 'accepted' %}badge-success
+                        {% elif app.status == 'rejected' %}badge-danger
+                        {% else %}badge-warning text-dark
+                        {% endif %}">
+                            {{ app.status|title }}
+                    </span>
+
+                </p>
+
+                <small class="text-muted">
+                    Applied on {{ app.applied_date|date:"d M Y" }}
+                </small>
             </div>
-            <p class="mb-1"><strong>{{ app.job.company_name }}</strong></p>
-            <p class="mb-1">Status: <strong>{{ app.status }}</strong></p>
-            <small>Applied on {{ app.applied_date|date:"d M Y" }}</small>
+
         </div>
+        {% endfor %}
+
     </div>
-    {% empty %}
-    <div class="list-group-item">
-        <p class="mb-0">You have not applied to any jobs yet.</p>
+    {% else %}
+    <div class="card shadow-sm p-4 text-center">
+        <p class="mb-0 text-muted">
+            You have not applied to any jobs yet.
+        </p>
     </div>
-    {% endfor %}
+    {% endif %}
+
 </div>
 {% endblock %}

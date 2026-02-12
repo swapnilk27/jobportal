@@ -3,80 +3,136 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<div class="container">
 
-    <h3 class="mb-4">Profile</h3>
+<div class="mb-4">
+    <h3 class="font-weight-bold mb-1">My Profile</h3>
+    <p class="text-muted mb-0">Account information and summary overview</p>
+    <hr>
+</div>
 
-    <div class="card mb-4 p-3">
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Role:</strong> {{ user.roles|title }}</p>
-    </div>
-
-    {% if user.roles == "jobseeker" %}
-    <h5>Application Summary</h5>
-    <div class="row text-center">
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <h6>Total</h6>
-                <h4>{{ total_applications }}</h4>
+<!-- User Info Card -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <p class="text-muted small mb-1">Username</p>
+                <h6 class="font-weight-bold mb-0">{{ user.username }}</h6>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <h6>Pending</h6>
-                <h4 class="text-warning">{{ pending_applications }}</h4>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <p class="text-muted small mb-1">Email</p>
+                <h6 class="font-weight-bold mb-0">{{ user.email }}</h6>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <h6>Accepted</h6>
-                <h4 class="text-success">{{ accepted_applications }}</h4>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <h6>Rejected</h6>
-                <h4 class="text-danger">{{ rejected_applications }}</h4>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm mt-4">
-                <h6>Withdrawn</h6>
-                <h4 class="text-danger">{{ withdrawn_applications }}</h4>
+            <div class="col-md-4">
+                <p class="text-muted small mb-1">Role</p>
+                <h6 class="font-weight-bold mb-0">{{ user.roles|title }}</h6>
             </div>
         </div>
     </div>
+</div>
 
-    {% elif user.roles == "recruiter" %}
-    <h5>Recruiter Summary</h5>
-    <div class="row text-center">
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <h6>Total Jobs</h6>
-                <h4>{{ total_jobs }}</h4>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <h6>Open Jobs</h6>
-                <h4 class="text-success">{{ open_jobs }}</h4>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <h6>Closed Jobs</h6>
-                <h4 class="text-secondary">{{ closed_jobs }}</h4>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <h6>Applications</h6>
-                <h4>{{ applications_received }}</h4>
+
+{% if user.roles == "jobseeker" %}
+
+<div class="mb-3">
+    <h5 class="font-weight-bold mb-3">Application Summary</h5>
+</div>
+
+<div class="row">
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Total</p>
+                <h4 class="font-weight-bold mb-0">{{ total_applications }}</h4>
             </div>
         </div>
     </div>
-    {% endif %}
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Pending</p>
+                <h4 class="font-weight-bold text-warning mb-0">{{ pending_applications }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Accepted</p>
+                <h4 class="font-weight-bold text-success mb-0">{{ accepted_applications }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Rejected</p>
+                <h4 class="font-weight-bold text-danger mb-0">{{ rejected_applications }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Withdrawn</p>
+                <h4 class="font-weight-bold text-secondary mb-0">{{ withdrawn_applications }}</h4>
+            </div>
+        </div>
+    </div>
 
 </div>
+
+
+{% elif user.roles == "recruiter" %}
+
+<div class="mb-3">
+    <h5 class="font-weight-bold mb-3">Recruiter Summary</h5>
+</div>
+
+<div class="row">
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Total Jobs</p>
+                <h4 class="font-weight-bold mb-0">{{ total_jobs }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Open Jobs</p>
+                <h4 class="font-weight-bold text-success mb-0">{{ open_jobs }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Closed Jobs</p>
+                <h4 class="font-weight-bold text-secondary mb-0">{{ closed_jobs }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3 mb-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <p class="text-muted small text-uppercase mb-1">Applications</p>
+                <h4 class="font-weight-bold mb-0">{{ applications_received }}</h4>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endif %}
+
 {% endblock %}

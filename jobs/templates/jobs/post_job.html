@@ -1,44 +1,89 @@
 {% extends "base.html" %}
 
-{% block title %}Post Jobs{% endblock %}
+{% block title %}Post Job{% endblock %}
 
 {% block navbar_buttons %}
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_job_list' %}" role="button">Job List</a>
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_dashboard' %}" role="button">Recruiter's
-    Dashboard</a>
-<a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
+<div class="d-flex">
+    <a class="btn btn-light border-0 shadow-sm mr-2"
+       href="{% url 'recruiter_job_list' %}">
+        Job List
+    </a>
+
+    <a class="btn btn-light border-0 shadow-sm mr-2"
+       href="{% url 'recruiter_dashboard' %}">
+        Dashboard
+    </a>
+</div>
 {% endblock %}
 
-<!-- Page Header -->
+
 {% block page_header %}
-<div class="container mt-4">
-    <h2 class="mb-1">Post Jobs</h2>
-    <!--    <p class="text-muted">All applications you applied</p>-->
+<div class="mb-4">
+    <h3 class="font-weight-bold mb-1">Post a New Job</h3>
+    <p class="text-muted mb-0">
+        Fill in the details below to publish a job opening
+    </p>
     <hr>
 </div>
 {% endblock %}
 
+
 {% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-12 col-md-8 col-lg-6">
 
-<div class="container mt-5">
-    <form method="POST" class="card mx-auto p-3 col-6">
-        {% csrf_token %}
-        <h3 class="text-center">Post the New Job Here..</h3>
-        <div class="mb-3">
-            <label for="job_title" class="form-label">Job Title</label>
-            <input type="text" class="form-control" id="job_title" name="job_title" required>
-        </div>
-        <div class="mb-3">
-            <label for="company_name" class="form-label">Company Name</label>
-            <input type="text" class="form-control" id="company_name" name="company_name" required>
-        </div>
-        <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input type="text" class="form-control" id="location" name="location" required>
-        </div>
+        <form method="POST" class="card border-0 shadow-sm p-4">
+            {% csrf_token %}
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+            <div class="mb-4">
+                <h5 class="font-weight-bold mb-1">Job Details</h5>
+                <p class="text-muted small mb-0">
+                    Provide accurate information to attract the right candidates
+                </p>
+            </div>
+
+            <div class="mb-3">
+                <label for="job_title" class="text-muted small">
+                    Job Title
+                </label>
+                <input type="text"
+                       class="form-control"
+                       id="job_title"
+                       name="job_title"
+                       placeholder="e.g. Software Engineer"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label for="company_name" class="text-muted small">
+                    Company Name
+                </label>
+                <input type="text"
+                       class="form-control"
+                       id="company_name"
+                       name="company_name"
+                       placeholder="e.g. ABC Technologies"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <label for="location" class="text-muted small">
+                    Location
+                </label>
+                <input type="text"
+                       class="form-control"
+                       id="location"
+                       name="location"
+                       placeholder="e.g. Mumbai, India"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Post Job
+            </button>
+
+        </form>
+
+    </div>
 </div>
-
 {% endblock %}

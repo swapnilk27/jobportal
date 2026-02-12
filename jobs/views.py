@@ -15,7 +15,9 @@ def jobseeker_dashboard(request):
         messages.error(request, "You are not authorized to access this page.")
         return redirect("login")
 
-    applications = Application.objects.filter(applicant=request.user)
+    applications = Application.objects.filter(applicant=request.user).exclude(
+        status="withdrawn"
+    )
 
     total_applications = applications.count()
     pending_applications = applications.filter(status="pending").count()
@@ -148,7 +150,7 @@ def recruiter_job_list(request):
 def jobseeker_job_list(request):
     query = request.GET.get("q", "").strip()
 
-    jobs = Job.objects.filter(status="open")
+    jobs = Job.objects.filter(status="open").order_by("-created_date")
 
     if query:
         jobs = jobs.filter(
@@ -157,7 +159,7 @@ def jobseeker_job_list(request):
             | Q(location__icontains=query)
         )
 
-    paginator = Paginator(jobs, 8)  # 8 per page
+    paginator = Paginator(jobs, 5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 

@@ -1,38 +1,78 @@
 {% extends "base.html" %}
 
-{% block title %}Sign Up Page{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block navbar_buttons %}
-<a href="{% url 'login' %}" class="btn btn-success">Login</a>
+<a href="{% url 'login' %}" class="btn btn-outline-success btn-sm">Log In</a>
 {% endblock %}
 
 {% block content %}
-<form method="POST" class="card mx-auto p-3 col-6">
-    {% csrf_token %}
-    <h3 class="text-center">Welcome to Sign-up Page</h3>
-    <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" required>
-    </div>
-    <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" required>
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required>
-    </div>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6 col-lg-5">
 
-    <div class="mb-3">
-        <label for="roles">Select Role:</label>
-        <select name="role" id="roles">
-            <option value="">--Please choose an option--</option>
-            <option value="jobseeker">Jobseeker</option>
-            <option value="recruiter">Recruiter</option>
-        </select>
+        <form method="POST" class="card border-0 shadow-sm p-4 mt-4">
+            {% csrf_token %}
+
+            <div class="text-center mb-4">
+                <h4 class="fw-bold mb-1">Create Your Account</h4>
+                <p class="text-muted small mb-0">
+                    Join the platform and get started in minutes
+                </p>
+            </div>
+
+            <div class="mb-3">
+                <label for="username" class="form-label text-muted small">
+                    Username
+                </label>
+                <input type="text"
+                       class="form-control"
+                       id="username"
+                       name="username"
+                       placeholder="Enter a username"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label text-muted small">
+                    Email Address
+                </label>
+                <input type="email"
+                       class="form-control"
+                       id="email"
+                       name="email"
+                       placeholder="Enter your email"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label text-muted small">
+                    Password
+                </label>
+                <input type="password"
+                       class="form-control"
+                       id="password"
+                       name="password"
+                       placeholder="Create a password"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <label for="roles" class="form-label text-muted small">
+                    Select Role
+                </label>
+                <select name="role" id="roles" class="form-control">
+                    <option value="">Choose your role</option>
+                    <option value="jobseeker">Jobseeker</option>
+                    <option value="recruiter">Recruiter</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Create Account
+            </button>
+
+        </form>
+
     </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
+</div>
 {% endblock %}

@@ -11,7 +11,9 @@ def my_applications(request):
     if request.user.roles != "jobseeker":
         return redirect("recruiter_dashboard")
 
-    applications = Application.objects.filter(applicant=request.user)
+    applications = Application.objects.filter(applicant=request.user).order_by(
+        "-applied_date"
+    )
 
     return render(
         request, "applications/my_applications.html", {"applications": applications}

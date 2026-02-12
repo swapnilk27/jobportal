@@ -3,72 +3,134 @@
 {% block title %}Applications{% endblock %}
 
 {% block navbar_buttons %}
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'post_job' %}" role="button">Post Jobs</a>
+<div class="d-flex gap-2">
+    <a class="btn btn-light border-0 shadow-sm"
+       href="{% url 'recruiter_dashboard' %}">
+        Dashboard
+    </a>
 
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_dashboard' %}" role="button">Recruiter's
-    Dashboard</a>
-<a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
+    <a class="btn btn-light border-0 shadow-sm"
+       href="{% url 'post_job' %}">
+        Post Job
+    </a>
+</div>
 {% endblock %}
 
-<!-- Page Header -->
+
 {% block page_header %}
 <div class="container mt-4">
-    <h2 class="mb-1">Applications</h2>
-    <p class="text-muted">All candidates who applied for this job</p>
+    <h2 class="font-weight-bold mb-1">Applications</h2>
+    <p class="text-muted mb-0">
+        All candidates who applied for this job
+    </p>
     <hr>
 </div>
-
 {% endblock %}
 
-{% block content %}
 
+{% block content %}
 <div class="container mt-4">
-    <h3>Applications for: {{ job.job_title }}</h3>
+
+    <div class="mb-4">
+        <h4 class="font-weight-bold mb-1">
+            {{ job.job_title }}
+        </h4>
+        <p class="text-muted small mb-0">
+            Total Applications:
+            <span class="badge badge-primary px-3 py-1">
+                {{ applications|length }}
+            </span>
+        </p>
+    </div>
 
     {% if applications %}
-    <table class="table table-bordered mt-3">
-        <thead>
-        <tr>
-            <th>Applicant</th>
-            <th>Email</th>
-            <th>Resume</th>
-            <th>Status</th>
-            <th>Applied On</th>
-            <th>Update Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for app in applications %}
-        <tr>
-            <td>{{ app.applicant.username }}</td>
-            <td>{{ app.applicant.email }}</td>
-            <td>
-                <a href="{{ app.resume.url }}" target="_blank">View</a>
-            </td>
-            <td>{{ app.status }}</td>
-            <td>{{ app.applied_date|date:"d M Y" }}</td>
-            <td>
-                {% if app.status == "pending" %}
-                <a href="{% url 'update_application_status' app.id 'accepted' %}"
-                   class="btn btn-success btn-sm">
-                    Accept
-                </a>
 
-                <a href="{% url 'update_application_status' app.id 'rejected' %}"
-                   class="btn btn-danger btn-sm">
-                    Reject
-                </a>
-                {% else %}
-                <span class="badge badge-info">{{ app.status }}</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="bg-light text-muted small">
+                <tr>
+                    <th class="pl-4">Applicant</th>
+                    <th>Email</th>
+                    <th>Resume</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                    <th class="text-center pr-4">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td class="pl-4 font-weight-bold">
+                        {{ app.applicant.username }}
+                    </td>
+
+                    <td class="text-muted">
+                        {{ app.applicant.email }}
+                    </td>
+
+                    <td>
+                        <a href="{{ app.resume.url }}"
+                           target="_blank"
+                           class="btn btn-sm btn-outline-secondary">
+                            View
+                        </a>
+                    </td>
+
+                    <td>
+                        {% if app.status == "pending" %}
+                        <span class="badge badge-warning px-3 py-2">
+                                    Pending
+                                </span>
+                        {% elif app.status == "accepted" %}
+                        <span class="badge badge-success px-3 py-2">
+                                    Accepted
+                                </span>
+                        {% elif app.status == "rejected" %}
+                        <span class="badge badge-danger px-3 py-2">
+                                    Rejected
+                                </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-muted">
+                        {{ app.applied_date|date:"d M Y" }}
+                    </td>
+
+                    <td class="text-center pr-4">
+                        {% if app.status == "pending" %}
+                        <a href="{% url 'update_application_status' app.id 'accepted' %}"
+                           class="btn btn-sm btn-success mr-1">
+                            Accept
+                        </a>
+
+                        <a href="{% url 'update_application_status' app.id 'rejected' %}"
+                           class="btn btn-sm btn-outline-danger">
+                            Reject
+                        </a>
+                        {% else %}
+                        <span class="text-muted small">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
     {% else %}
-    <p>No applications yet.</p>
-    {% endif %}
-</div>
 
+    <div class="card border-0 shadow-sm p-4 text-center">
+        <h5 class="text-muted mb-1">No applications yet</h5>
+        <p class="text-muted small mb-0">
+            Candidates will appear here once they apply.
+        </p>
+    </div>
+
+    {% endif %}
+
+</div>
 {% endblock %}
