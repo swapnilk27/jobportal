@@ -15,14 +15,29 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Job',
+            name="Job",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('job_title', models.CharField(max_length=200)),
-                ('company_name', models.CharField(max_length=200)),
-                ('location', models.CharField(max_length=200)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('posted_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("job_title", models.CharField(max_length=200)),
+                ("company_name", models.CharField(max_length=200)),
+                ("location", models.CharField(max_length=200)),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                (
+                    "posted_by",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

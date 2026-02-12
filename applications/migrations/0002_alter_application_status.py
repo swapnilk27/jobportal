@@ -6,13 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('applications', '0001_initial'),
+        ("applications", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='application',
-            name='status',
-            field=models.CharField(choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected'), ('withdrawn', 'Withdrawn')], default='pending', max_length=10),
+            model_name="application",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("pending", "Pending"),
+                    ("accepted", "Accepted"),
+                    ("rejected", "Rejected"),
+                    ("withdrawn", "Withdrawn"),
+                ],
+                default="pending",
+                max_length=10,
+            ),
         ),
     ]
