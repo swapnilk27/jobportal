@@ -3,3 +3,4 @@ Django==5.2.10
 pillow==12.1.0
 python-dotenv==1.2.1
 sqlparse==0.5.5
+black==26.1.0

@@ -1,13 +1,16 @@
-from django.shortcuts import render, redirect
-from  django.contrib import messages
-from  django.contrib.auth import authenticate, login, logout
-from .models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from jobs.models import Job
+from django.shortcuts import render, redirect
+
 from applications.models import Application
+from jobs.models import Job
+from .models import User
+
 
 def home(rquest):
     return redirect("login")
+
 
 def signup_page(request):
     if request.user.is_authenticated:
@@ -25,16 +28,14 @@ def signup_page(request):
             return redirect("signup")
 
         User.objects.create_user(
-            username=username,
-            password=password,
-            email=email,
-            roles=role
+            username=username, password=password, email=email, roles=role
         )
 
         messages.success(request, "Account created successfully")
         return redirect("login")
 
     return render(request, "accounts/signup.html")
+
 
 def login_page(request):
     # If already logged in → redirect
@@ -70,32 +71,49 @@ def login_page(request):
 
 def logout_page(request):
     logout(request)
-    messages.warning(request,"You have been Logged Out")
+    messages.warning(request, "You have been Logged Out")
     return redirect("login")
+
 
 @login_required(login_url="login")
 def profile(request):
     user = request.user
 
-    context = {
-        "user": user
-    }
+    context = {"user": user}
 
     if user.roles == "jobseeker":
-        context.update({
-            "total_applications": Application.objects.filter(applicant=user).count(),
-            "pending_applications": Application.objects.filter(applicant=user, status="pending").count(),
-            "accepted_applications": Application.objects.filter(applicant=user, status="accepted").count(),
-            "rejected_applications": Application.objects.filter(applicant=user, status="rejected").count(),
-            "withdrawn_applications": Application.objects.filter(applicant=user, status="withdrawn").count(),
-        })
+        context.update(
+            {
+                "total_applications": Application.objects.filter(
+                    applicant=user
+                ).count(),
+                "pending_applications": Application.objects.filter(
+                    applicant=user, status="pending"
+                ).count(),
+                "accepted_applications": Application.objects.filter(
+                    applicant=user, status="accepted"
+                ).count(),
+                "rejected_applications": Application.objects.filter(
+                    applicant=user, status="rejected"
+                ).count(),
+                "withdrawn_applications": Application.objects.filter(
+                    applicant=user, status="withdrawn"
+                ).count(),
+            }
+        )
 
     elif user.roles == "recruiter":
-        context.update({
-            "total_jobs": Job.objects.filter(posted_by=user).count(),
-            "open_jobs": Job.objects.filter(posted_by=user, status="open").count(),
-            "closed_jobs": Job.objects.filter(posted_by=user, status="closed").count(),
-            "applications_received": Application.objects.filter(job__posted_by=user).exclude(status="withdrawn").count(),
-        })
+        context.update(
+            {
+                "total_jobs": Job.objects.filter(posted_by=user).count(),
+                "open_jobs": Job.objects.filter(posted_by=user, status="open").count(),
+                "closed_jobs": Job.objects.filter(
+                    posted_by=user, status="closed"
+                ).count(),
+                "applications_received": Application.objects.filter(job__posted_by=user)
+                .exclude(status="withdrawn")
+                .count(),
+            }
+        )
 
     return render(request, "accounts/profile.html", context)

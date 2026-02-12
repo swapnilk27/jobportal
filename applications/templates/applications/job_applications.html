@@ -5,7 +5,8 @@
 {% block navbar_buttons %}
 <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'post_job' %}" role="button">Post Jobs</a>
 
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_dashboard' %}" role="button">Recruiter's Dashboard</a>
+<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_dashboard' %}" role="button">Recruiter's
+    Dashboard</a>
 <a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
 {% endblock %}
 
@@ -16,6 +17,7 @@
     <p class="text-muted">All candidates who applied for this job</p>
     <hr>
 </div>
+
 {% endblock %}
 
 {% block content %}
@@ -24,48 +26,48 @@
     <h3>Applications for: {{ job.job_title }}</h3>
 
     {% if applications %}
-        <table class="table table-bordered mt-3">
-            <thead>
-                <tr>
-                    <th>Applicant</th>
-                    <th>Email</th>
-                    <th>Resume</th>
-                    <th>Status</th>
-                    <th>Applied On</th>
-                    <th>Update Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for app in applications %}
-                <tr>
-                    <td>{{ app.applicant.username }}</td>
-                    <td>{{ app.applicant.email }}</td>
-                    <td>
-                        <a href="{{ app.resume.url }}" target="_blank">View</a>
-                    </td>
-                    <td>{{ app.status }}</td>
-                    <td>{{ app.applied_date|date:"d M Y" }}</td>
-                    <td>
-                        {% if app.status == "pending" %}
-                            <a href="{% url 'update_application_status' app.id 'accepted' %}"
-                               class="btn btn-success btn-sm">
-                                Accept
-                            </a>
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>Applicant</th>
+            <th>Email</th>
+            <th>Resume</th>
+            <th>Status</th>
+            <th>Applied On</th>
+            <th>Update Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.applicant.username }}</td>
+            <td>{{ app.applicant.email }}</td>
+            <td>
+                <a href="{{ app.resume.url }}" target="_blank">View</a>
+            </td>
+            <td>{{ app.status }}</td>
+            <td>{{ app.applied_date|date:"d M Y" }}</td>
+            <td>
+                {% if app.status == "pending" %}
+                <a href="{% url 'update_application_status' app.id 'accepted' %}"
+                   class="btn btn-success btn-sm">
+                    Accept
+                </a>
 
-                            <a href="{% url 'update_application_status' app.id 'rejected' %}"
-                               class="btn btn-danger btn-sm">
-                                Reject
-                            </a>
-                        {% else %}
-                            <span class="badge badge-info">{{ app.status }}</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                <a href="{% url 'update_application_status' app.id 'rejected' %}"
+                   class="btn btn-danger btn-sm">
+                    Reject
+                </a>
+                {% else %}
+                <span class="badge badge-info">{{ app.status }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     {% else %}
-        <p>No applications yet.</p>
+    <p>No applications yet.</p>
     {% endif %}
 </div>
 

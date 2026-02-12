@@ -3,7 +3,8 @@
 {% block title %}Job{% endblock %}
 
 {% block navbar_buttons %}
-<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'jobseeker_dashboard' %}" role="button">Jobseeker's Dashboard</a>
+<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'jobseeker_dashboard' %}" role="button">Jobseeker's
+    Dashboard</a>
 <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'jobseeker_job_list' %}" role="button">Job List</a>
 <a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
 {% endblock %}
@@ -19,20 +20,20 @@
 
 {% block content %}
 
-<div class="container mt-5 card" >
+<div class="container mt-5 card">
     <h2>{{ job.job_title }}</h2>
-        <p><strong>{{ job.company_name }}</strong></p>
-        <p>{{ job.location }}</p>
-        <form method="POST"
-              action="{% url 'apply_job' job.id %}"
-              enctype="multipart/form-data">
-            {% csrf_token %}
-            <label>Upload Resume</label>
-            <input type="file" name="resume" required>
-            <div>
-                <button type="submit" class="btn btn-success">Apply</button>
-            </div>
+    <p><strong>{{ job.company_name }}</strong></p>
+    <p>{{ job.location }}</p>
+    <form method="POST"
+          action="{% url 'apply_job' job.id %}"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Upload Resume</label>
+        <input type="file" name="resume" required>
+        <div>
+            <button type="submit" class="btn btn-success">Apply</button>
+        </div>
 
-        </form>
+    </form>
 </div>
 {% endblock %}

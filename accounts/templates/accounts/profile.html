@@ -14,68 +14,68 @@
     </div>
 
     {% if user.roles == "jobseeker" %}
-        <h5>Application Summary</h5>
-        <div class="row text-center">
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm">
-                    <h6>Total</h6>
-                    <h4>{{ total_applications }}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm">
-                    <h6>Pending</h6>
-                    <h4 class="text-warning">{{ pending_applications }}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm">
-                    <h6>Accepted</h6>
-                    <h4 class="text-success">{{ accepted_applications }}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm">
-                    <h6>Rejected</h6>
-                    <h4 class="text-danger">{{ rejected_applications }}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm mt-4">
-                    <h6>Withdrawn</h6>
-                    <h4 class="text-danger">{{ withdrawn_applications }}</h4>
-                </div>
+    <h5>Application Summary</h5>
+    <div class="row text-center">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h6>Total</h6>
+                <h4>{{ total_applications }}</h4>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h6>Pending</h6>
+                <h4 class="text-warning">{{ pending_applications }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h6>Accepted</h6>
+                <h4 class="text-success">{{ accepted_applications }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h6>Rejected</h6>
+                <h4 class="text-danger">{{ rejected_applications }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm mt-4">
+                <h6>Withdrawn</h6>
+                <h4 class="text-danger">{{ withdrawn_applications }}</h4>
+            </div>
+        </div>
+    </div>
 
     {% elif user.roles == "recruiter" %}
-        <h5>Recruiter Summary</h5>
-        <div class="row text-center">
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm">
-                    <h6>Total Jobs</h6>
-                    <h4>{{ total_jobs }}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm">
-                    <h6>Open Jobs</h6>
-                    <h4 class="text-success">{{ open_jobs }}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm">
-                    <h6>Closed Jobs</h6>
-                    <h4 class="text-secondary">{{ closed_jobs }}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm">
-                    <h6>Applications</h6>
-                    <h4>{{ applications_received }}</h4>
-                </div>
+    <h5>Recruiter Summary</h5>
+    <div class="row text-center">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h6>Total Jobs</h6>
+                <h4>{{ total_jobs }}</h4>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h6>Open Jobs</h6>
+                <h4 class="text-success">{{ open_jobs }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h6>Closed Jobs</h6>
+                <h4 class="text-secondary">{{ closed_jobs }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h6>Applications</h6>
+                <h4>{{ applications_received }}</h4>
+            </div>
+        </div>
+    </div>
     {% endif %}
 
 </div>

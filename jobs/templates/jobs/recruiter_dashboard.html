@@ -3,9 +3,9 @@
 {% block title %}Recruiter's Dashboard{% endblock %}
 
 {% block navbar_buttons %}
-        <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_job_list' %}" role="button">Job List</a>
-        <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'post_job' %}" role="button">Post Jobs</a>
-        <a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
+<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_job_list' %}" role="button">Job List</a>
+<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'post_job' %}" role="button">Post Jobs</a>
+<a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
 {% endblock %}
 
 <!-- Page Header -->
@@ -21,17 +21,17 @@
 
     <h5>Summary</h5>
     <ul class="list-group mt-3 mb-3">
-      <li class="list-group-item">Total Jobs Posted: {{ total_job_posted }}</li>
-      <li class="list-group-item">Total Applications Received: {{ total_applications_received }}</li>
-      <li class="list-group-item">Pending Applications: {{ pending_applications }}</li>
-      <li class="list-group-item">Accepted Applications: {{ accepted_applications }}</li>
+        <li class="list-group-item">Total Jobs Posted: {{ total_job_posted }}</li>
+        <li class="list-group-item">Total Applications Received: {{ total_applications_received }}</li>
+        <li class="list-group-item">Pending Applications: {{ pending_applications }}</li>
+        <li class="list-group-item">Accepted Applications: {{ accepted_applications }}</li>
     </ul>
 
     {% if jobs_with_no_applicants > 0 %}
-        <div class="alert alert-warning">
-            {{ jobs_with_no_applicants }} job{{ jobs_with_no_applicants|pluralize }}
-            have no applicants yet.
-        </div>
+    <div class="alert alert-warning">
+        {{ jobs_with_no_applicants }} job{{ jobs_with_no_applicants|pluralize }}
+        have no applicants yet.
+    </div>
     {% endif %}
 
 </div>
@@ -42,27 +42,27 @@
     <h5>Recent Jobs</h5>
 
     {% if latest_jobs %}
-        <ul class="list-group mt-3 mb-3">
-            {% for job in latest_jobs %}
-                <li class="list-group-item">
-                    <strong>{{ job.job_title }}</strong><br>
-                    {% if job.status == "open" %}
-                        <span class="badge bg-success">Open</span>
-                    {% else %}
-                        <span class="badge bg-secondary">Closed</span>
-                    {% endif %}
-                    <a href="{% url 'toggle_job_status' job.id %}" class="btn btn-sm btn-warning float-end">
-                        {% if job.status == "open" %}Close{% else %}Reopen{% endif %}
-                    </a>
-                    <small>{{ job.created_date|date:"d M Y" }}</small><br>
-                    <a href="{% url 'job_applications' job.id %}">
-                        View Applications
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+    <ul class="list-group mt-3 mb-3">
+        {% for job in latest_jobs %}
+        <li class="list-group-item">
+            <strong>{{ job.job_title }}</strong><br>
+            {% if job.status == "open" %}
+            <span class="badge bg-success">Open</span>
+            {% else %}
+            <span class="badge bg-secondary">Closed</span>
+            {% endif %}
+            <a href="{% url 'toggle_job_status' job.id %}" class="btn btn-sm btn-warning float-end">
+                {% if job.status == "open" %}Close{% else %}Reopen{% endif %}
+            </a>
+            <small>{{ job.created_date|date:"d M Y" }}</small><br>
+            <a href="{% url 'job_applications' job.id %}">
+                View Applications
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
     {% else %}
-        <p>You haven’t posted any jobs yet.</p>
+    <p>You haven’t posted any jobs yet.</p>
     {% endif %}
 </div>
 

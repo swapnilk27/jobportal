@@ -1,19 +1,19 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Q
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
 
-
-from accounts.models import User
 from applications.models import Application
 from .models import Job
+
+
 # Create your views here.
-@login_required(login_url='login')
+@login_required(login_url="login")
 def jobseeker_dashboard(request):
     if request.user.roles != "jobseeker":
         messages.error(request, "You are not authorized to access this page.")
-        return redirect('login')
+        return redirect("login")
 
     applications = Application.objects.filter(applicant=request.user)
 
@@ -38,18 +38,20 @@ def jobseeker_dashboard(request):
     return render(request, "jobs/jobseeker_dashboard.html", context)
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def recruiter_dashboard(request):
     if request.user.roles != "recruiter":
         messages.error(request, "You are not authorized to access this page.")
-        return redirect('login')
+        return redirect("login")
 
     jobs = Job.objects.filter(posted_by=request.user)
 
     total_job_posted = jobs.count()
-    total_applications_received = Application.objects.filter(
-        job__posted_by=request.user
-    ).exclude(status="withdrawn").count()
+    total_applications_received = (
+        Application.objects.filter(job__posted_by=request.user)
+        .exclude(status="withdrawn")
+        .count()
+    )
 
     pending_applications = Application.objects.filter(
         status="pending", job__posted_by=request.user
@@ -75,12 +77,11 @@ def recruiter_dashboard(request):
     return render(request, "jobs/recruiter_dashboard.html", context)
 
 
-
-@login_required(login_url='login')
+@login_required(login_url="login")
 def post_job(request):
     if request.user.roles != "recruiter":
         messages.error(request, "You are not authorized to access this page.")
-        return redirect('login')
+        return redirect("login")
 
     if request.method == "POST":
         data = request.POST
@@ -93,44 +94,44 @@ def post_job(request):
             posted_by=request.user,
             job_title__iexact=job_title,
             company_name__iexact=company_name,
-            location__iexact=location
+            location__iexact=location,
         ).exists()
 
         if duplicate_job:
             messages.warning(
                 request,
-                "You have already posted a similar job with the same title, company, and location."
+                "You have already posted a similar job with the same title, company, and location.",
             )
-            return redirect('post_job')
+            return redirect("post_job")
 
         # Create job if no duplicate
         Job.objects.create(
             job_title=job_title,
             company_name=company_name,
             location=location,
-            posted_by=request.user
+            posted_by=request.user,
         )
 
         messages.success(request, "Job created and submitted successfully!")
-        return redirect('recruiter_job_list')
+        return redirect("recruiter_job_list")
 
-    return render(request, 'jobs/post_job.html')
+    return render(request, "jobs/post_job.html")
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def recruiter_job_list(request):
     if request.user.roles != "recruiter":
-        messages.error(request, "You are not authorized to view recruiter job listings.")
-        return redirect('jobseeker_dashboard')
+        messages.error(
+            request, "You are not authorized to view recruiter job listings."
+        )
+        return redirect("jobseeker_dashboard")
 
     query = request.GET.get("q", "").strip()
 
     jobs = Job.objects.filter(posted_by=request.user)
 
     if query:
-        jobs = jobs.filter(
-            Q(job_title__icontains=query) |
-            Q(location__icontains=query)
-        )
+        jobs = jobs.filter(Q(job_title__icontains=query) | Q(location__icontains=query))
 
     paginator = Paginator(jobs.order_by("-created_date"), 5)  # 5 per page
     page_number = request.GET.get("page")
@@ -141,8 +142,8 @@ def recruiter_job_list(request):
         "query": query,
     }
 
-
     return render(request, "jobs/recruiter_job_list.html", context)
+
 
 def jobseeker_job_list(request):
     query = request.GET.get("q", "").strip()
@@ -151,9 +152,9 @@ def jobseeker_job_list(request):
 
     if query:
         jobs = jobs.filter(
-            Q(job_title__icontains=query) |
-            Q(company_name__icontains=query) |
-            Q(location__icontains=query)
+            Q(job_title__icontains=query)
+            | Q(company_name__icontains=query)
+            | Q(location__icontains=query)
         )
 
     paginator = Paginator(jobs, 8)  # 8 per page
@@ -167,11 +168,12 @@ def jobseeker_job_list(request):
 
     return render(request, "jobs/jobseeker_job_list.html", context)
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def apply_job(request, job_id):
     if request.user.roles != "jobseeker":
         messages.error(request, "Only jobseekers can apply for jobs.")
-        return redirect('recruiter_dashboard')
+        return redirect("recruiter_dashboard")
 
     job = Job.objects.get(id=job_id)
 
@@ -181,34 +183,32 @@ def apply_job(request, job_id):
     # Prevent duplicate application
     if Application.objects.filter(job=job, applicant=request.user).exists():
         messages.error(request, "You already applied for this job")
-        return redirect('job_detail', job_id=job_id)
+        return redirect("job_detail", job_id=job_id)
 
     if request.method == "POST":
         resume = request.FILES.get("resume")
 
-        application = Application(
-            job=job,
-            applicant=request.user,
-            resume=resume
-        )
+        application = Application(job=job, applicant=request.user, resume=resume)
 
         try:
             application.full_clean()  # This triggers validators
             application.save()
             messages.success(request, "Job applied successfully!")
-            return redirect('jobseeker_dashboard')
+            return redirect("jobseeker_dashboard")
 
         except Exception as e:
             messages.error(request, "Invalid file type. Only PDF, DOC, DOCX allowed.")
-            return redirect('job_detail', job_id=job_id)
+            return redirect("job_detail", job_id=job_id)
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def job_detail_page(request, job_id):
     if request.user.roles != "jobseeker":
         messages.error(request, "You are not authorized to view this job.")
-        return redirect('recruiter_dashboard')
+        return redirect("recruiter_dashboard")
     job = Job.objects.get(id=job_id)
-    return render(request, "jobs/job.html", context={'job':job})
+    return render(request, "jobs/job.html", context={"job": job})
+
 
 @login_required(login_url="login")
 def toggle_job_status(request, job_id):
@@ -229,7 +229,7 @@ def toggle_job_status(request, job_id):
     return redirect("recruiter_dashboard")
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def edit_job(request, job_id):
     if request.user.roles != "recruiter":
         messages.error(request, "Only recruiters can edit jobs.")

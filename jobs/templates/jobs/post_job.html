@@ -3,16 +3,17 @@
 {% block title %}Post Jobs{% endblock %}
 
 {% block navbar_buttons %}
-        <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_job_list' %}" role="button">Job List</a>
-        <a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_dashboard' %}" role="button">Recruiter's Dashboard</a>
-        <a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
+<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_job_list' %}" role="button">Job List</a>
+<a class="btn btn-primary" data-bs-toggle="collapse" href="{% url 'recruiter_dashboard' %}" role="button">Recruiter's
+    Dashboard</a>
+<a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
 {% endblock %}
 
 <!-- Page Header -->
 {% block page_header %}
 <div class="container mt-4">
     <h2 class="mb-1">Post Jobs</h2>
-<!--    <p class="text-muted">All applications you applied</p>-->
+    <!--    <p class="text-muted">All applications you applied</p>-->
     <hr>
 </div>
 {% endblock %}
@@ -23,20 +24,20 @@
     <form method="POST" class="card mx-auto p-3 col-6">
         {% csrf_token %}
         <h3 class="text-center">Post the New Job Here..</h3>
-      <div class="mb-3">
-        <label for="job_title" class="form-label">Job Title</label>
-        <input type="text" class="form-control" id="job_title" name="job_title" required>
-      </div>
-      <div class="mb-3">
-        <label for="company_name" class="form-label">Company Name</label>
-        <input type="text" class="form-control" id="company_name" name="company_name" required>
-      </div>
         <div class="mb-3">
-        <label for="location" class="form-label">Location</label>
-        <input type="text" class="form-control" id="location" name="location" required>
-      </div>
+            <label for="job_title" class="form-label">Job Title</label>
+            <input type="text" class="form-control" id="job_title" name="job_title" required>
+        </div>
+        <div class="mb-3">
+            <label for="company_name" class="form-label">Company Name</label>
+            <input type="text" class="form-control" id="company_name" name="company_name" required>
+        </div>
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 

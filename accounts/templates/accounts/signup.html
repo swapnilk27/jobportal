@@ -7,32 +7,32 @@
 {% endblock %}
 
 {% block content %}
-    <form method="POST" class="card mx-auto p-3 col-6">
-        {% csrf_token %}
-        <h3 class="text-center">Welcome to Sign-up Page</h3>
-      <div class="mb-3">
+<form method="POST" class="card mx-auto p-3 col-6">
+    {% csrf_token %}
+    <h3 class="text-center">Welcome to Sign-up Page</h3>
+    <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>
-      </div>
-      <div class="mb-3">
+    </div>
+    <div class="mb-3">
         <label for="email" class="form-label">Email</label>
         <input type="email" class="form-control" id="email" name="email" required>
-      </div>
-      <div class="mb-3">
+    </div>
+    <div class="mb-3">
         <label for="password" class="form-label">Password</label>
         <input type="password" class="form-control" id="password" name="password" required>
-      </div>
+    </div>
 
-      <div class="mb-3">
-          <label for="roles">Select Role:</label>
-          <select name="role" id="roles">
-                <option value="">--Please choose an option--</option>
-                <option value="jobseeker">Jobseeker</option>
-                <option value="recruiter">Recruiter</option>
-          </select>
-      </div>
+    <div class="mb-3">
+        <label for="roles">Select Role:</label>
+        <select name="role" id="roles">
+            <option value="">--Please choose an option--</option>
+            <option value="jobseeker">Jobseeker</option>
+            <option value="recruiter">Recruiter</option>
+        </select>
+    </div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 {% endblock %}

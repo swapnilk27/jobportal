@@ -1,5 +1,8 @@
 from django.db import models
+
 from accounts.models import User
+
+
 # Create your models here.
 class Job(models.Model):
     STATUS_CHOICES = (
@@ -16,4 +19,3 @@ class Job(models.Model):
 
     def __str__(self):
         return self.job_title
-
