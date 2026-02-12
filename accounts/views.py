@@ -8,7 +8,12 @@ from jobs.models import Job
 from .models import User
 
 
-def home(rquest):
+def home(request):
+    if request.user.is_authenticated:
+        if request.user.roles == "jobseeker":
+            return redirect("jobseeker_dashboard")
+        elif request.user.roles == "recruiter":
+            return redirect("recruiter_dashboard")
     return redirect("login")
 
 
