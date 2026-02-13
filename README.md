@@ -8,6 +8,18 @@ This project demonstrates **role-based authentication**, **state-driven workflow
 
 ---
 
+## 🌐 Live Demo
+
+🔗 https://swapnilk27.pythonanywhere.com
+
+## ⭐ Key Highlights
+
+- Role-based authentication and dashboards
+- State-driven job application workflow
+- Search and pagination using Django ORM
+- Secure resume upload handling
+- Production deployment experience
+
 ## 🚀 Features
 
 ### 👤 Authentication & Authorization
@@ -165,6 +177,16 @@ MEDIA_ROOT = BASE_DIR / "media"
 - Clean dashboard-driven UI
 - Django Admin customization
 
+## 🚀 Deployment
+
+- Deployed on **PythonAnywhere** (Free Tier)
+- Production settings enabled (`DEBUG = False`)
+- Static files handled using `collectstatic`
+- Database migrations applied on production
+- Media uploads enabled (resume upload)
+
+> Note: This deployment is for demo/portfolio purposes.
+
 ### 📸 Screenshots
 
 ### Jobseeker Dashboard
@@ -189,7 +211,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 ### SignUp
 
-![SignUp](screenshots/login.png)
+![SignUp](screenshots/signup.png)
 
 ### License
 
