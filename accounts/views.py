@@ -46,6 +46,10 @@ def login_page(request):
     # If already logged in → redirect
     if request.user.is_authenticated:
         messages.info(request, "You are already logged in.")
+
+        if request.user.is_superuser:
+            return redirect("/admin/")
+
         if request.user.roles == "recruiter":
             return redirect("recruiter_dashboard")
         elif request.user.roles == "jobseeker":
@@ -63,6 +67,10 @@ def login_page(request):
 
         login(request, user)
         messages.success(request, "Logged in successfully")
+
+        # SUPERUSER FIRST
+        if user.is_superuser:
+            return redirect("/admin/")
 
         if user.roles == "recruiter":
             return redirect("recruiter_dashboard")

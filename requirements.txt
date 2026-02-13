@@ -1,6 +1,12 @@
 asgiref==3.11.0
-Django==5.2.10
-pillow==12.1.0
-python-dotenv==1.2.1
-sqlparse==0.5.5
 black==26.1.0
+click==8.3.1
+Django==5.2.10
+mypy_extensions==1.1.0
+packaging==26.0
+pathspec==1.0.4
+pillow==12.1.0
+platformdirs==4.5.1
+python-dotenv==1.2.1
+pytokens==0.4.1
+sqlparse==0.5.5
